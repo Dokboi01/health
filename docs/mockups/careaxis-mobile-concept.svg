@@ -1,0 +1,139 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="980" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F7FBFF"/>
+      <stop offset="0.55" stop-color="#F2FAF7"/>
+      <stop offset="1" stop-color="#EDF6FF"/>
+    </linearGradient>
+    <linearGradient id="phoneTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDFEFF"/>
+      <stop offset="1" stop-color="#F5FAFF"/>
+    </linearGradient>
+    <linearGradient id="heroBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F6CBD"/>
+      <stop offset="1" stop-color="#3CA7FF"/>
+    </linearGradient>
+    <linearGradient id="heroGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8FAF2"/>
+      <stop offset="1" stop-color="#D8F4E6"/>
+    </linearGradient>
+    <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#8AA9C7" flood-opacity="0.18"/>
+    </filter>
+    <filter id="cardShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#7C9AB8" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="980" fill="url(#bg)"/>
+  <circle cx="196" cy="164" r="120" fill="#DDF1FF" opacity="0.8"/>
+  <circle cx="1424" cy="826" r="158" fill="#D9F6EA" opacity="0.8"/>
+  <circle cx="1312" cy="176" r="92" fill="#E6F5FF" opacity="0.9"/>
+
+  <text x="120" y="120" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="700">CareAxis Mobile Concept</text>
+  <text x="120" y="158" fill="#5D788F" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Premium health-tech experience for patients and doctors</text>
+
+  <g filter="url(#softShadow)">
+    <rect x="270" y="220" width="430" height="700" rx="48" fill="#0F1720"/>
+    <rect x="292" y="242" width="386" height="656" rx="36" fill="url(#phoneTop)"/>
+    <rect x="422" y="258" width="126" height="18" rx="9" fill="#132433" opacity="0.9"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="900" y="220" width="430" height="700" rx="48" fill="#0F1720"/>
+    <rect x="922" y="242" width="386" height="656" rx="36" fill="url(#phoneTop)"/>
+    <rect x="1052" y="258" width="126" height="18" rx="9" fill="#132433" opacity="0.9"/>
+  </g>
+
+  <text x="332" y="310" fill="#6D879A" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing="2.6">PATIENT APP</text>
+  <text x="962" y="310" fill="#6D879A" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing="2.6">DOCTOR APP</text>
+
+  <text x="332" y="354" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">Good morning</text>
+  <text x="332" y="390" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Amina</text>
+  <rect x="548" y="338" width="98" height="34" rx="17" fill="#E4F4EA"/>
+  <text x="574" y="360" fill="#1E7C5A" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Stable</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="332" y="424" width="306" height="146" rx="28" fill="url(#heroBlue)"/>
+  </g>
+  <text x="360" y="462" fill="#D9EEFF" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="1.4">NEXT APPOINTMENT</text>
+  <text x="360" y="504" fill="white" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Dr Samuel Adebayo</text>
+  <text x="360" y="538" fill="#E6F4FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="500">Today, 9:00 AM  •  Cardiology Review</text>
+  <rect x="360" y="594" width="118" height="40" rx="20" fill="white" opacity="0.16"/>
+  <text x="390" y="620" fill="white" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">View Visit</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="332" y="594" width="146" height="122" rx="24" fill="#FFFFFF"/>
+    <rect x="494" y="594" width="144" height="122" rx="24" fill="#FFFFFF"/>
+  </g>
+  <text x="354" y="628" fill="#7A94A6" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1">ADHERENCE</text>
+  <text x="354" y="672" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">92%</text>
+  <text x="354" y="698" fill="#23A36B" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">On track this week</text>
+
+  <text x="516" y="628" fill="#7A94A6" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1">ACTIVE MEDS</text>
+  <text x="516" y="672" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">4</text>
+  <text x="516" y="698" fill="#5D788F" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">1 due in 45 mins</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="332" y="738" width="306" height="122" rx="26" fill="#FFFFFF"/>
+  </g>
+  <text x="356" y="774" fill="#7A94A6" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1">TODAY'S REMINDERS</text>
+  <rect x="356" y="794" width="258" height="1" fill="#E6EEF6"/>
+  <circle cx="372" cy="818" r="8" fill="#2CB67D"/>
+  <text x="392" y="824" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">Take Lisinopril 10 mg</text>
+  <text x="392" y="848" fill="#6D879A" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600">8:00 PM  •  After dinner</text>
+  <rect x="558" y="806" width="56" height="28" rx="14" fill="#E4F4EA"/>
+  <text x="574" y="824" fill="#1E7C5A" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Due</text>
+
+  <rect x="332" y="872" width="306" height="14" rx="7" fill="#EEF4F9"/>
+  <circle cx="390" cy="879" r="4.5" fill="#0F6CBD"/>
+  <circle cx="486" cy="879" r="4.5" fill="#A7BACB"/>
+  <circle cx="582" cy="879" r="4.5" fill="#A7BACB"/>
+
+  <text x="962" y="354" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">Welcome back</text>
+  <text x="962" y="390" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Dr Samuel</text>
+  <rect x="1148" y="338" width="118" height="34" rx="17" fill="#E6F3FF"/>
+  <text x="1172" y="360" fill="#0F6CBD" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Verified</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="962" y="424" width="306" height="146" rx="28" fill="#FFFFFF"/>
+  </g>
+  <text x="988" y="458" fill="#7A94A6" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1">TODAY OVERVIEW</text>
+  <rect x="988" y="480" width="118" height="72" rx="20" fill="#EEF6FF"/>
+  <rect x="1118" y="480" width="124" height="72" rx="20" fill="url(#heroGreen)"/>
+  <text x="1012" y="510" fill="#0F6CBD" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">APPOINTMENTS</text>
+  <text x="1012" y="544" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">18</text>
+  <text x="1142" y="510" fill="#1E7C5A" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">FOLLOW-UPS</text>
+  <text x="1142" y="544" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">6</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="962" y="594" width="146" height="122" rx="24" fill="#FFFFFF"/>
+    <rect x="1122" y="594" width="146" height="122" rx="24" fill="#FFFFFF"/>
+  </g>
+  <text x="986" y="628" fill="#7A94A6" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1">ACTIVE PATIENTS</text>
+  <text x="986" y="672" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">142</text>
+  <text x="986" y="698" fill="#5D788F" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">12 new this month</text>
+
+  <text x="1146" y="628" fill="#7A94A6" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1">ALERTS</text>
+  <text x="1146" y="672" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">3</text>
+  <text x="1146" y="698" fill="#23A36B" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">1 urgent follow-up</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="962" y="738" width="306" height="122" rx="26" fill="#FFFFFF"/>
+  </g>
+  <text x="986" y="774" fill="#7A94A6" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1">UPCOMING VISITS</text>
+  <rect x="986" y="794" width="258" height="1" fill="#E6EEF6"/>
+  <circle cx="1002" cy="818" r="8" fill="#0F6CBD"/>
+  <text x="1022" y="824" fill="#12344D" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">Amina Okafor</text>
+  <text x="1022" y="848" fill="#6D879A" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600">9:00 AM  •  Cardiology Review</text>
+  <rect x="1180" y="806" width="64" height="28" rx="14" fill="#E6F3FF"/>
+  <text x="1194" y="824" fill="#0F6CBD" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Open</text>
+
+  <rect x="962" y="872" width="306" height="14" rx="7" fill="#EEF4F9"/>
+  <circle cx="1020" cy="879" r="4.5" fill="#A7BACB"/>
+  <circle cx="1115" cy="879" r="4.5" fill="#0F6CBD"/>
+  <circle cx="1210" cy="879" r="4.5" fill="#A7BACB"/>
+
+  <text x="276" y="944" fill="#6D879A" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">Patient dashboard concept</text>
+  <text x="907" y="944" fill="#6D879A" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">Doctor dashboard concept</text>
+</svg>

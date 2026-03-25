@@ -101,6 +101,17 @@ CREATE TABLE refresh_tokens (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE password_reset_tokens (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token_hash TEXT NOT NULL UNIQUE,
+  requested_ip VARCHAR(64),
+  user_agent TEXT,
+  expires_at TIMESTAMPTZ NOT NULL,
+  used_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE device_tokens (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -204,9 +215,24 @@ CREATE TABLE medications (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE medication_schedules (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  medication_id UUID NOT NULL REFERENCES medications(id) ON DELETE CASCADE,
+  patient_id UUID NOT NULL REFERENCES patient_profiles(id) ON DELETE CASCADE,
+  day_of_week SMALLINT CHECK (day_of_week BETWEEN 0 AND 6),
+  scheduled_time TIME NOT NULL,
+  reminder_time TIME,
+  timezone VARCHAR(100) NOT NULL DEFAULT 'Africa/Lagos',
+  label VARCHAR(80),
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE medication_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   medication_id UUID NOT NULL REFERENCES medications(id) ON DELETE CASCADE,
+  medication_schedule_id UUID REFERENCES medication_schedules(id) ON DELETE SET NULL,
   patient_id UUID NOT NULL REFERENCES patient_profiles(id) ON DELETE CASCADE,
   scheduled_for TIMESTAMPTZ NOT NULL,
   taken_at TIMESTAMPTZ,
@@ -263,10 +289,18 @@ CREATE TABLE medical_records (
   record_type medical_record_type NOT NULL,
   title VARCHAR(180) NOT NULL,
   summary TEXT,
+  clinical_notes TEXT,
+  diagnosis TEXT,
+  treatment_plan TEXT,
   source VARCHAR(160),
+  follow_up_date DATE,
+  test_results JSONB NOT NULL DEFAULT '[]'::jsonb,
+  is_visible_to_patient BOOLEAN NOT NULL DEFAULT FALSE,
+  last_updated_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
   recorded_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CHECK (jsonb_typeof(test_results) = 'array')
 );
 
 CREATE TABLE medical_record_files (
@@ -276,6 +310,10 @@ CREATE TABLE medical_record_files (
   file_url TEXT NOT NULL,
   file_type VARCHAR(120),
   file_size_bytes BIGINT,
+  storage_provider VARCHAR(50) NOT NULL CHECK (storage_provider IN ('S3', 'CLOUDINARY', 'OTHER')),
+  provider_asset_id VARCHAR(255),
+  checksum_sha256 CHAR(64),
+  is_patient_visible BOOLEAN NOT NULL DEFAULT FALSE,
   uploaded_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -330,21 +368,37 @@ CREATE TABLE audit_logs (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+ALTER TABLE patient_vitals
+ADD COLUMN medical_record_id UUID REFERENCES medical_records(id) ON DELETE SET NULL;
+
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_status ON users(status);
 CREATE INDEX idx_refresh_tokens_user_id ON refresh_tokens(user_id);
 CREATE INDEX idx_refresh_tokens_expires_at ON refresh_tokens(expires_at);
+CREATE INDEX idx_password_reset_tokens_user_id ON password_reset_tokens(user_id);
+CREATE INDEX idx_password_reset_tokens_expires_at ON password_reset_tokens(expires_at);
 CREATE INDEX idx_doctor_patient_links_doctor_id ON doctor_patient_links(doctor_id);
 CREATE INDEX idx_doctor_patient_links_patient_id ON doctor_patient_links(patient_id);
+CREATE INDEX idx_device_tokens_user_active ON device_tokens(user_id, is_active);
 CREATE INDEX idx_appointments_doctor_time ON appointments(doctor_id, scheduled_start);
 CREATE INDEX idx_appointments_patient_time ON appointments(patient_id, scheduled_start);
 CREATE INDEX idx_appointments_status ON appointments(status);
 CREATE INDEX idx_prescriptions_patient_id ON prescriptions(patient_id);
 CREATE INDEX idx_medications_patient_id ON medications(patient_id);
+CREATE INDEX idx_medication_schedules_medication_id ON medication_schedules(medication_id);
+CREATE INDEX idx_medication_schedules_patient_id ON medication_schedules(patient_id);
 CREATE INDEX idx_medication_logs_medication_id ON medication_logs(medication_id);
+CREATE INDEX idx_medication_logs_schedule_id ON medication_logs(medication_schedule_id);
+CREATE INDEX idx_patient_allergies_patient_id ON patient_allergies(patient_id);
+CREATE INDEX idx_patient_vitals_patient_recorded_at ON patient_vitals(patient_id, recorded_at DESC);
+CREATE INDEX idx_patient_vitals_medical_record_id ON patient_vitals(medical_record_id);
 CREATE INDEX idx_medical_records_patient_id ON medical_records(patient_id);
+CREATE INDEX idx_medical_records_patient_visibility ON medical_records(patient_id, is_visible_to_patient, recorded_at DESC);
+CREATE INDEX idx_medical_record_files_record_id ON medical_record_files(medical_record_id);
 CREATE INDEX idx_reminders_user_time ON reminders(user_id, scheduled_for);
+CREATE INDEX idx_reminders_status_scheduled_for ON reminders(status, scheduled_for);
 CREATE INDEX idx_notifications_user_created_at ON notifications(user_id, created_at DESC);
+CREATE INDEX idx_notifications_user_read_at ON notifications(user_id, read_at);
 CREATE INDEX idx_audit_logs_actor_user_id ON audit_logs(actor_user_id);
 
 CREATE TRIGGER users_set_updated_at
@@ -394,6 +448,11 @@ EXECUTE FUNCTION set_updated_at();
 
 CREATE TRIGGER medications_set_updated_at
 BEFORE UPDATE ON medications
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+
+CREATE TRIGGER medication_schedules_set_updated_at
+BEFORE UPDATE ON medication_schedules
 FOR EACH ROW
 EXECUTE FUNCTION set_updated_at();
 

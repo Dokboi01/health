@@ -49,7 +49,7 @@ class DashboardScaffold extends StatelessWidget {
                       child: IconButton.filledTonal(
                         onPressed: onLogout,
                         style: IconButton.styleFrom(
-                          backgroundColor: Colors.white.withOpacity(0.18),
+                          backgroundColor: Colors.white.withValues(alpha: 0.18),
                           foregroundColor: Colors.white,
                         ),
                         icon: const Icon(Icons.logout_rounded),
@@ -67,7 +67,7 @@ class DashboardScaffold extends StatelessWidget {
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.white.withOpacity(0.92),
+                            color: Colors.white.withValues(alpha: 0.92),
                             height: 1.45,
                           ),
                     ),

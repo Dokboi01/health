@@ -32,6 +32,15 @@ export interface LoginInput {
   password: string;
 }
 
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface ResetPasswordInput {
+  token: string;
+  password: string;
+}
+
 export interface RequestMetadata {
   deviceIp?: string;
   deviceName?: string;
@@ -56,6 +65,14 @@ export interface RefreshTokenRecord {
   tokenHash: string;
   expiresAt: Date;
   revokedAt?: Date | null;
+}
+
+export interface PasswordResetTokenRecord {
+  id: string;
+  userId: string;
+  tokenHash: string;
+  expiresAt: Date;
+  usedAt?: Date | null;
 }
 
 export interface AuthenticatedUserProfile {
@@ -89,6 +106,19 @@ export interface RefreshTokenInsertInput extends RequestMetadata {
   expiresAt: Date;
 }
 
+export interface PasswordResetTokenInsertInput extends RequestMetadata {
+  id: string;
+  userId: string;
+  tokenHash: string;
+  expiresAt: Date;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+  resetTokenPreview?: string;
+  resetTokenExpiresIn?: string;
+}
+
 export interface AuthRepository {
   createPatientUser(client: PoolClient, input: RegisterPatientInput, passwordHash: string): Promise<UserRecord>;
   createDoctorUser(client: PoolClient, input: RegisterDoctorInput, passwordHash: string): Promise<UserRecord>;
@@ -97,7 +127,12 @@ export interface AuthRepository {
   getUserProfile(userId: string): Promise<AuthenticatedUserProfile | null>;
   createRefreshToken(input: RefreshTokenInsertInput): Promise<void>;
   findRefreshTokenById(tokenId: string): Promise<RefreshTokenRecord | null>;
-  revokeRefreshToken(tokenId: string): Promise<void>;
+  revokeRefreshToken(tokenId: string, client?: PoolClient): Promise<void>;
+  revokeAllRefreshTokensForUser(userId: string, client?: PoolClient): Promise<void>;
+  createPasswordResetToken(input: PasswordResetTokenInsertInput): Promise<void>;
+  findPasswordResetTokenByHash(tokenHash: string): Promise<PasswordResetTokenRecord | null>;
+  markPasswordResetTokenUsed(tokenId: string, client?: PoolClient): Promise<void>;
+  revokeActivePasswordResetTokensForUser(userId: string, client?: PoolClient): Promise<void>;
+  updateUserPassword(userId: string, passwordHash: string, client?: PoolClient): Promise<void>;
   touchLastLogin(userId: string): Promise<void>;
 }
-

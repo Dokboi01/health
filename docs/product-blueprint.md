@@ -194,6 +194,8 @@ mobile/
 - `GET /api/v1/doctors/me`
 - `PATCH /api/v1/doctors/me`
 - `GET /api/v1/doctors/me/patients`
+- `POST /api/v1/doctors/me/patients`
+- `PATCH /api/v1/doctors/me/patients/:patientId`
 - `GET /api/v1/doctors/me/appointments`
 - `GET /api/v1/doctors/me/prescriptions`
 - `GET /api/v1/doctors/me/availability`
@@ -204,6 +206,7 @@ mobile/
 - `GET /api/v1/patients/me`
 - `PATCH /api/v1/patients/me`
 - `GET /api/v1/patients/me/doctors`
+- `PATCH /api/v1/patients/me/primary-doctor`
 - `GET /api/v1/patients/me/appointments`
 - `GET /api/v1/patients/me/prescriptions`
 - `GET /api/v1/patients/me/medications`
@@ -254,6 +257,7 @@ mobile/
 
 - `GET /api/v1/search/global`
 - `GET /api/v1/search/patients`
+- `GET /api/v1/search/doctors`
 - `GET /api/v1/search/appointments`
 - `GET /api/v1/search/prescriptions`
 

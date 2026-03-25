@@ -15,6 +15,13 @@ const baseRegistrationSchema = z.object({
   dateOfBirth: z.string().date().optional(),
 });
 
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters long.")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+  .regex(/[0-9]/, "Password must contain at least one number.");
+
 export const registerPatientSchema = baseRegistrationSchema.extend({
   bloodGroup: z.string().trim().max(5).optional(),
   genotype: z.string().trim().max(10).optional(),
@@ -39,3 +46,11 @@ export const refreshTokenSchema = z.object({
   refreshToken: z.string().min(20),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.email().transform((value) => value.trim().toLowerCase()),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().trim().min(32),
+  password: passwordSchema,
+});

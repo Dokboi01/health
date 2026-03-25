@@ -1,10 +1,12 @@
-import type { PoolClient } from "pg";
+import type { PoolClient, QueryResultRow } from "pg";
 
 import { AppRole } from "../../common/constants/roles";
 import { runQuery } from "../../config/database";
 import type {
   AuthRepository,
   AuthenticatedUserProfile,
+  PasswordResetTokenInsertInput,
+  PasswordResetTokenRecord,
   RefreshTokenInsertInput,
   RefreshTokenRecord,
   RegisterDoctorInput,
@@ -35,6 +37,18 @@ const mapUserRow = (row: UserRow): UserRecord => ({
   phone: row.phone,
   avatarUrl: row.avatar_url,
 });
+
+const executeQuery = <T extends QueryResultRow>(
+  text: string,
+  values: unknown[],
+  client?: PoolClient,
+) => {
+  if (client) {
+    return client.query<T>(text, values);
+  }
+
+  return runQuery<T>(text, values);
+};
 
 const ensureUserSettings = async (client: PoolClient, userId: string): Promise<void> => {
   await client.query("INSERT INTO user_settings (user_id) VALUES ($1)", [userId]);
@@ -295,8 +309,103 @@ const findRefreshTokenById = async (tokenId: string): Promise<RefreshTokenRecord
   };
 };
 
-const revokeRefreshToken = async (tokenId: string): Promise<void> => {
-  await runQuery("UPDATE refresh_tokens SET revoked_at = NOW() WHERE id = $1 AND revoked_at IS NULL", [tokenId]);
+const revokeRefreshToken = async (tokenId: string, client?: PoolClient): Promise<void> => {
+  await executeQuery(
+    "UPDATE refresh_tokens SET revoked_at = NOW() WHERE id = $1 AND revoked_at IS NULL",
+    [tokenId],
+    client,
+  );
+};
+
+const revokeAllRefreshTokensForUser = async (userId: string, client?: PoolClient): Promise<void> => {
+  await executeQuery(
+    "UPDATE refresh_tokens SET revoked_at = NOW() WHERE user_id = $1 AND revoked_at IS NULL",
+    [userId],
+    client,
+  );
+};
+
+const createPasswordResetToken = async (input: PasswordResetTokenInsertInput): Promise<void> => {
+  await runQuery(
+    `
+      INSERT INTO password_reset_tokens (id, user_id, token_hash, requested_ip, user_agent, expires_at)
+      VALUES ($1, $2, $3, $4, $5, $6)
+    `,
+    [
+      input.id,
+      input.userId,
+      input.tokenHash,
+      input.deviceIp ?? null,
+      input.userAgent ?? null,
+      input.expiresAt,
+    ],
+  );
+};
+
+const findPasswordResetTokenByHash = async (tokenHash: string): Promise<PasswordResetTokenRecord | null> => {
+  const result = await runQuery<{
+    id: string;
+    user_id: string;
+    token_hash: string;
+    expires_at: Date;
+    used_at: Date | null;
+  }>(
+    `
+      SELECT id, user_id, token_hash, expires_at, used_at
+      FROM password_reset_tokens
+      WHERE token_hash = $1
+      LIMIT 1
+    `,
+    [tokenHash],
+  );
+
+  if (!result.rowCount) {
+    return null;
+  }
+
+  const row = result.rows[0];
+
+  return {
+    id: row.id,
+    userId: row.user_id,
+    tokenHash: row.token_hash,
+    expiresAt: row.expires_at,
+    usedAt: row.used_at,
+  };
+};
+
+const markPasswordResetTokenUsed = async (tokenId: string, client?: PoolClient): Promise<void> => {
+  await executeQuery(
+    `
+      UPDATE password_reset_tokens
+      SET used_at = NOW()
+      WHERE id = $1
+        AND used_at IS NULL
+    `,
+    [tokenId],
+    client,
+  );
+};
+
+const revokeActivePasswordResetTokensForUser = async (userId: string, client?: PoolClient): Promise<void> => {
+  await executeQuery(
+    `
+      UPDATE password_reset_tokens
+      SET used_at = NOW()
+      WHERE user_id = $1
+        AND used_at IS NULL
+    `,
+    [userId],
+    client,
+  );
+};
+
+const updateUserPassword = async (userId: string, passwordHash: string, client?: PoolClient): Promise<void> => {
+  await executeQuery(
+    "UPDATE users SET password_hash = $2, updated_at = NOW() WHERE id = $1",
+    [userId, passwordHash],
+    client,
+  );
 };
 
 const touchLastLogin = async (userId: string): Promise<void> => {
@@ -312,6 +421,11 @@ export const authRepository: AuthRepository = {
   createRefreshToken,
   findRefreshTokenById,
   revokeRefreshToken,
+  revokeAllRefreshTokensForUser,
+  createPasswordResetToken,
+  findPasswordResetTokenByHash,
+  markPasswordResetTokenUsed,
+  revokeActivePasswordResetTokensForUser,
+  updateUserPassword,
   touchLastLogin,
 };
-

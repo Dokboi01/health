@@ -8,6 +8,7 @@ CareAxis is a production-style medical health platform for admins, doctors, and 
 - Complete PostgreSQL database schema for authentication, doctor-patient management, appointments, prescriptions, medications, records, reminders, notifications, and admin auditing
 - Phase 1 backend foundation: secure Express API setup, environment management, PostgreSQL connection layer, validation, error handling, JWT auth, refresh token rotation, and RBAC middleware
 - Phase 1 Flutter foundation: premium theme, app shell, routing, Riverpod state management, login flow, and role-based starter dashboards
+- Phase 2 backend and mobile slice: doctor and patient profile management, doctor-patient linking, searchable paginated care-team lists, and dedicated profile screens
 
 ## Repository structure
 
@@ -57,4 +58,3 @@ CareAxis is a production-style medical health platform for admins, doctors, and 
 ## Workspace note
 
 The Flutter CLI is not currently available in this shell environment, so the Flutter app has been scaffolded manually with a real-world folder structure and starter code. Once Flutter is installed locally, the project is ready for `flutter pub get` and the standard platform bootstrapping workflow.
-

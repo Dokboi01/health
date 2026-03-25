@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/forms/validators/field_validators.dart';
 import '../../../../core/models/app_role.dart';
 import '../providers/auth_controller.dart';
 
@@ -184,17 +185,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         labelText: 'Email address',
                                         prefixIcon: Icon(Icons.mail_outline_rounded),
                                       ),
-                                      validator: (value) {
-                                        if (value == null || value.trim().isEmpty) {
-                                          return 'Email is required.';
-                                        }
-
-                                        if (!value.contains('@')) {
-                                          return 'Enter a valid email address.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: FieldValidators.email,
                                     ),
                                     const SizedBox(height: 18),
                                     TextFormField(
@@ -204,13 +195,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         labelText: 'Password',
                                         prefixIcon: Icon(Icons.lock_outline_rounded),
                                       ),
-                                      validator: (value) {
-                                        if (value == null || value.trim().length < 4) {
-                                          return 'Password must be at least 4 characters.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: (value) =>
+                                          FieldValidators.minLength(value, 4, fieldName: 'Password'),
                                     ),
                                     const SizedBox(height: 18),
                                     Text(

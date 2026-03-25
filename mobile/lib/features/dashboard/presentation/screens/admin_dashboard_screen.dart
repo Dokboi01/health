@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/widgets/dashboard_scaffold.dart';
 import '../../../../core/widgets/metric_card.dart';
@@ -15,7 +16,7 @@ class AdminDashboardScreen extends ConsumerWidget {
   Future<void> _logout(BuildContext context, WidgetRef ref) async {
     await ref.read(authControllerProvider.notifier).signOut();
     if (context.mounted) {
-      context.go('/login');
+      context.go(RouteNames.login);
     }
   }
 
@@ -114,4 +115,3 @@ class _DashboardListTile extends StatelessWidget {
     );
   }
 }
-

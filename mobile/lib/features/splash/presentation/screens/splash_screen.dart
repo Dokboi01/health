@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
@@ -31,7 +32,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       return;
     }
 
-    context.go('/login');
+    context.go(RouteNames.login);
   }
 
   @override
@@ -58,7 +59,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 height: 86,
                 width: 86,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.16),
+                  color: Colors.white.withValues(alpha: 0.16),
                   borderRadius: BorderRadius.circular(28),
                   border: Border.all(color: Colors.white24),
                 ),
@@ -80,7 +81,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               Text(
                 'Secure care coordination for modern clinics.',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
               ),
             ],

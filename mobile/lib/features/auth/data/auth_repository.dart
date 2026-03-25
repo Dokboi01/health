@@ -54,11 +54,16 @@ class AuthRepository {
           response.data?['data'] as Map<String, dynamic>? ?? const <String, dynamic>{};
       return AuthSession.fromApi(payload);
     } on DioException catch (error) {
-      final message = error.response?.data is Map<String, dynamic>
-          ? ((error.response?.data as Map<String, dynamic>)['error']
-                  as Map<String, dynamic>?)?['message']
-              as String?
-          : null;
+      final responseData = error.response?.data;
+      String? message;
+
+      if (responseData is Map<String, dynamic>) {
+        final errorPayload = responseData['error'];
+
+        if (errorPayload is Map<String, dynamic>) {
+          message = errorPayload['message'] as String?;
+        }
+      }
 
       throw Exception(message ?? 'Unable to sign in right now.');
     }

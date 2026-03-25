@@ -11,10 +11,13 @@ import { env } from "../../config/env";
 import { authRepository } from "./auth.repository";
 import type {
   AuthResponse,
+  ForgotPasswordInput,
+  ForgotPasswordResponse,
   LoginInput,
   RegisterDoctorInput,
   RegisterPatientInput,
   RequestMetadata,
+  ResetPasswordInput,
   UserRecord,
 } from "./auth.types";
 
@@ -25,6 +28,9 @@ type RefreshTokenPayload = JwtPayload & {
   sub: string;
   jti: string;
 };
+
+const passwordResetAcceptedMessage =
+  "If an account with that email exists, a password reset link has been prepared.";
 
 const durationToMilliseconds = (duration: string): number => {
   const parsed = /^(\d+)([smhd])$/.exec(duration.trim());
@@ -143,6 +149,16 @@ const verifyRefreshToken = async (refreshToken: string): Promise<RefreshTokenPay
   return payload;
 };
 
+const buildForgotPasswordResponse = (resetToken?: string): ForgotPasswordResponse => ({
+  message: passwordResetAcceptedMessage,
+  ...(env.NODE_ENV !== "production" && resetToken
+    ? {
+        resetTokenPreview: resetToken,
+        resetTokenExpiresIn: env.PASSWORD_RESET_EXPIRES_IN,
+      }
+    : {}),
+});
+
 const registerPatient = async (
   input: RegisterPatientInput,
   metadata?: RequestMetadata,
@@ -219,6 +235,52 @@ const logout = async (refreshToken: string): Promise<void> => {
   }
 };
 
+const forgotPassword = async (
+  input: ForgotPasswordInput,
+  metadata?: RequestMetadata,
+): Promise<ForgotPasswordResponse> => {
+  const user = await authRepository.findUserByEmail(input.email);
+
+  if (!user || user.status !== UserStatus.ACTIVE) {
+    return buildForgotPasswordResponse();
+  }
+
+  const rawResetToken = crypto.randomBytes(32).toString("hex");
+
+  await authRepository.revokeActivePasswordResetTokensForUser(user.id);
+  await authRepository.createPasswordResetToken({
+    id: crypto.randomUUID(),
+    userId: user.id,
+    tokenHash: hashToken(rawResetToken),
+    expiresAt: new Date(Date.now() + durationToMilliseconds(env.PASSWORD_RESET_EXPIRES_IN)),
+    ...metadata,
+  });
+
+  return buildForgotPasswordResponse(rawResetToken);
+};
+
+const resetPassword = async (input: ResetPasswordInput): Promise<void> => {
+  const tokenRecord = await authRepository.findPasswordResetTokenByHash(hashToken(input.token));
+
+  if (!tokenRecord || tokenRecord.usedAt || tokenRecord.expiresAt.getTime() <= Date.now()) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "The password reset token is invalid or has expired.",
+      "INVALID_RESET_TOKEN",
+    );
+  }
+
+  const user = assertUserCanAuthenticate(await authRepository.findUserById(tokenRecord.userId));
+  const passwordHash = await bcrypt.hash(input.password, env.BCRYPT_SALT_ROUNDS);
+
+  await withTransaction(async (client) => {
+    await authRepository.updateUserPassword(user.id, passwordHash, client);
+    await authRepository.markPasswordResetTokenUsed(tokenRecord.id, client);
+    await authRepository.revokeActivePasswordResetTokensForUser(user.id, client);
+    await authRepository.revokeAllRefreshTokensForUser(user.id, client);
+  });
+};
+
 const getCurrentUser = async (userId: string) => {
   const profile = await authRepository.getUserProfile(userId);
 
@@ -235,6 +297,7 @@ export const authService = {
   login,
   refresh,
   logout,
+  forgotPassword,
+  resetPassword,
   getCurrentUser,
 };
-

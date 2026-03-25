@@ -60,6 +60,25 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+export const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+  const data = await authService.forgotPassword(req.body, getRequestMetadata(req));
+
+  res.status(StatusCodes.OK).json({
+    success: true,
+    message: data.message,
+    data,
+  });
+});
+
+export const resetPassword = asyncHandler(async (req: Request, res: Response) => {
+  await authService.resetPassword(req.body);
+
+  res.status(StatusCodes.OK).json({
+    success: true,
+    message: "Password reset successful.",
+  });
+});
+
 export const me = asyncHandler(async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError(StatusCodes.UNAUTHORIZED, "Authentication is required.", "UNAUTHORIZED");
@@ -72,4 +91,3 @@ export const me = asyncHandler(async (req: Request, res: Response) => {
     data,
   });
 });
-

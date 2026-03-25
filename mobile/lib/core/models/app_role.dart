@@ -1,3 +1,5 @@
+import '../../app/router/route_names.dart';
+
 enum AppRole {
   admin,
   doctor,
@@ -16,9 +18,9 @@ enum AppRole {
       };
 
   String get dashboardRoute => switch (this) {
-        AppRole.admin => '/dashboard/admin',
-        AppRole.doctor => '/dashboard/doctor',
-        AppRole.patient => '/dashboard/patient',
+        AppRole.admin => RouteNames.adminDashboard,
+        AppRole.doctor => RouteNames.doctorDashboard,
+        AppRole.patient => RouteNames.patientDashboard,
       };
 
   static AppRole fromValue(String value) {
@@ -32,4 +34,3 @@ enum AppRole {
     }
   }
 }
-

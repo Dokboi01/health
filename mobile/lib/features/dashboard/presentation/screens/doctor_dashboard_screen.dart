@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/widgets/dashboard_scaffold.dart';
 import '../../../../core/widgets/metric_card.dart';
@@ -15,7 +16,7 @@ class DoctorDashboardScreen extends ConsumerWidget {
   Future<void> _logout(BuildContext context, WidgetRef ref) async {
     await ref.read(authControllerProvider.notifier).signOut();
     if (context.mounted) {
-      context.go('/login');
+      context.go(RouteNames.login);
     }
   }
 
@@ -57,6 +58,27 @@ class DoctorDashboardScreen extends ConsumerWidget {
           child: MiniTrendChart(
             points: [18, 22, 20, 28, 32, 29, 36],
             color: AppColors.accentGreen,
+          ),
+        ),
+        const SizedBox(height: 16),
+        SectionCard(
+          title: 'Phase 2 quick access',
+          subtitle: 'Move directly into the doctor profile and patient relationship tools added in this phase.',
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              FilledButton.tonalIcon(
+                onPressed: () => context.push(RouteNames.doctorProfile),
+                icon: const Icon(Icons.badge_outlined),
+                label: const Text('View profile'),
+              ),
+              FilledButton.tonalIcon(
+                onPressed: () => context.push(RouteNames.doctorPatients),
+                icon: const Icon(Icons.groups_outlined),
+                label: const Text('Open patients'),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -114,4 +136,3 @@ class _DashboardListTile extends StatelessWidget {
     );
   }
 }
-

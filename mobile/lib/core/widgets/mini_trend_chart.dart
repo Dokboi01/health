@@ -64,8 +64,8 @@ class _MiniTrendChartPainter extends CustomPainter {
     final fillPaint = Paint()
       ..shader = LinearGradient(
         colors: [
-          color.withOpacity(0.28),
-          color.withOpacity(0.02),
+          color.withValues(alpha: 0.28),
+          color.withValues(alpha: 0.02),
         ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
