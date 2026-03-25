@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26424061896",
+    "project_id": "careaxis-5caee",
+    "storage_bucket": "careaxis-5caee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26424061896:android:633cab61dfccf6fc18dafd",
+        "android_client_info": {
+          "package_name": "com.careaxis.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAonWmZQwScpCvyxtxbN-mHoEdWVsl6ca0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

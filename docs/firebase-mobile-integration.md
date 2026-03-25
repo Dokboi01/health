@@ -17,6 +17,9 @@ This project now includes Flutter-side Firebase Messaging integration in Dart:
 - `mobile/lib/features/notifications/data/notifications_repository.dart`
 - `mobile/lib/app/app.dart`
 - `mobile/lib/bootstrap.dart`
+- `mobile/lib/firebase_options.dart`
+- `mobile/firebase.json`
+- `mobile/android/app/google-services.json`
 - `mobile/android/...`
 - `mobile/ios/...`
 
@@ -33,47 +36,23 @@ The production mobile app identifiers are now:
 - Android namespace: `com.careaxis.mobile`
 - iOS bundle ID: `com.careaxis.mobile`
 
-The remaining Firebase-specific step is either to authenticate the Firebase CLI and run:
-
-```bash
-flutterfire configure --project=careaxis-5caee
-```
-
-or to register those app IDs manually in Firebase and download:
-
-- `google-services.json` for Android
-- `GoogleService-Info.plist` for iOS
+FlutterFire has been configured successfully against Firebase project `careaxis-5caee`.
+The app now initializes Firebase with generated `DefaultFirebaseOptions.currentPlatform`.
 
 ## What You Need To Do Next
 
-1. Log in to the Firebase CLI on this machine:
+1. Rebuild the Flutter app so the generated Firebase configuration is picked up.
 
-```bash
-firebase login
-```
+2. For full iOS push delivery, still complete Apple push setup:
 
-2. In the Firebase console, create:
+- enable the Push Notifications capability in the iOS target
+- configure an APNs authentication key or certificate in the Firebase console
 
-- an Android app with package name `com.careaxis.mobile`
-- an iOS app with bundle ID `com.careaxis.mobile`
-
-3. Then either run FlutterFire configure:
-
-```bash
-flutterfire configure --project=careaxis-5caee
-```
-
-or place the downloaded native config files in:
-
-- `mobile/android/app/google-services.json`
-- `mobile/ios/Runner/GoogleService-Info.plist`
-
-4. Rebuild the app after the generated Firebase config lands.
+3. For backend push delivery, keep the backend FCM service-account values populated in `backend/.env`.
 
 ## Current App Behavior
 
-- If Firebase is not configured yet, the app will fail gracefully and keep running.
-- If Firebase is configured and the user signs in against the real backend, the app will register the device token through:
+- If the user signs in against the real backend, the app will register the device token through:
 
 `POST /api/v1/notifications/device-tokens`
 
